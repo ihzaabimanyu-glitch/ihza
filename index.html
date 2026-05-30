@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Deteksi Wajah - Face Detection</title>
+    <title>Absen Wajah - Face Detection</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>🎯 Deteksi Wajah</h1>
-            <p>Sistem Deteksi Wajah Real-Time dengan AI</p>
+            <h1>🎯 Absen Wajah</h1>
+            <p>Sistem Absensi Wajah Real-Time untuk Presensi</p>
         </header>
 
         <main>
@@ -57,9 +57,19 @@
                             <li>✅ Klik tombol "Mulai Deteksi" untuk memulai</li>
                             <li>✅ Izinkan akses kamera untuk deteksi real-time</li>
                             <li>✅ Sistem akan mendeteksi wajah Anda secara otomatis</li>
-                            <li>✅ Klik "Ambil Foto" untuk menangkap hasil deteksi</li>
-                            <li>✅ Teknologi: TensorFlow.js + Face-api</li>
+                            <li>✅ Klik "Ambil Foto" untuk mencatat absen</li>
+                            <li>✅ Teknologi: TensorFlow.js + BlazeFace</li>
                         </ul>
+                    </div>
+
+                    <div class="attendance-box">
+                        <h3>📝 Daftar Absen</h3>
+                        <div class="attendance-summary">
+                            <p>Total Presensi: <strong id="attendanceCount">0</strong></p>
+                        </div>
+                        <div id="attendanceList" class="attendance-list">
+                            <p class="empty-message">Belum ada absen</p>
+                        </div>
                     </div>
 
                     <div class="detected-faces">

@@ -1,6 +1,6 @@
-# 🎯 Sistem Deteksi Wajah (Face Detection Website)
+# 🎯 Sistem Absen Wajah (Face Detection Website)
 
-Website interaktif untuk deteksi wajah real-time menggunakan teknologi AI dan machine learning.
+Website interaktif untuk absensi wajah real-time menggunakan teknologi AI dan machine learning.
 
 ## ✨ Fitur Utama
 

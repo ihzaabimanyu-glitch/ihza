@@ -7,6 +7,7 @@ let isDetecting = false;
 let detectionFrames = 0;
 let lastFrameTime = Date.now();
 let currentFPS = 0;
+let attendanceRecords = [];
 
 // DOM Elements
 const startBtn = document.getElementById('startBtn');
@@ -18,6 +19,8 @@ const fpsEl = document.getElementById('fps');
 const accuracyEl = document.getElementById('accuracy');
 const statusEl = document.getElementById('status');
 const facesList = document.getElementById('facesList');
+const attendanceCountEl = document.getElementById('attendanceCount');
+const attendanceList = document.getElementById('attendanceList');
 const gallery = document.getElementById('gallery');
 const gallerySection = document.getElementById('gallerySection');
 
@@ -256,6 +259,130 @@ function updateFacesList(predictions) {
     });
 
     facesList.innerHTML = html;
+}
+
+// Tangkap foto dan catat absen
+function capturePhoto() {
+    const faceCount = parseInt(faceCountEl.textContent, 10) || 0;
+    if (faceCount === 0) {
+        updateStatus('Tidak ada wajah untuk absen', 'idle');
+        return;
+    }
+
+    // Buat foto dari canvas
+    const photoCanvas = document.createElement('canvas');
+    photoCanvas.width = canvas.width;
+    photoCanvas.height = canvas.height;
+    const photoCtx = photoCanvas.getContext('2d');
+    photoCtx.drawImage(canvas, 0, 0);
+    const imageData = photoCanvas.toDataURL('image/jpeg');
+
+    // Tambah ke gallery
+    addToGallery(imageData);
+
+    // Catat absen
+    const now = new Date();
+    attendanceRecords.unshift({
+        time: now.toLocaleString('id-ID', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+        }),
+        faces: faceCount,
+        accuracy: accuracyEl.textContent
+    });
+    renderAttendanceList();
+
+    updateStatus('Absen berhasil dicatat!', 'success');
+    setTimeout(() => {
+        if (isDetecting) {
+            updateStatus('Mendeteksi...', 'detecting');
+        }
+    }, 2000);
+}
+
+// Render daftar absen
+function renderAttendanceList() {
+    attendanceCountEl.textContent = attendanceRecords.length;
+
+    if (attendanceRecords.length === 0) {
+        attendanceList.innerHTML = '<p class="empty-message">Belum ada absen</p>';
+        return;
+    }
+
+    attendanceList.innerHTML = attendanceRecords.map((record, idx) => {
+        return `
+            <div class="attendance-item">
+                <div>
+                    <strong>Absen #${attendanceRecords.length - idx}</strong><br>
+                    <small>${record.time}</small>
+                </div>
+                <div class="attendance-meta">
+                    <span>${record.faces} wajah</span>
+                    <span>${record.accuracy}</span>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+// Tambah foto ke gallery
+function addToGallery(imageData) {
+    gallerySection.style.display = 'block';
+    const item = document.createElement('div');
+    item.className = 'gallery-item';
+    item.innerHTML = `
+        <img src="${imageData}" alt="Hasil Absen">
+        <button class="delete-btn">Hapus</button>
+    `;
+
+    const deleteBtn = item.querySelector('.delete-btn');
+    deleteBtn.addEventListener('click', () => {
+        item.remove();
+        if (gallery.children.length === 0) {
+            gallerySection.style.display = 'none';
+        }
+    });
+
+    item.addEventListener('click', event => {
+        if (event.target !== deleteBtn) {
+            openImageModal(imageData);
+        }
+    });
+
+    gallery.prepend(item);
+}
+
+// Buka foto dalam modal besar
+function openImageModal(imageData) {
+    let modal = document.querySelector('.modal');
+    if (!modal) {
+        modal = document.createElement('div');
+        modal.className = 'modal';
+        modal.innerHTML = `
+            <div class="modal-content">
+                <span class="modal-close">×</span>
+                <img src="${imageData}" alt="Foto Absen">
+            </div>
+        `;
+        document.body.appendChild(modal);
+
+        modal.querySelector('.modal-close').addEventListener('click', () => {
+            modal.classList.remove('active');
+        });
+        modal.addEventListener('click', event => {
+            if (event.target === modal) {
+                modal.classList.remove('active');
+            }
+        });
+    } else {
+        modal.querySelector('img').src = imageData;
+    }
+
+    modal.classList.add('active');
 }
 
 // Update status
