@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deteksi Wajah - Face Detection</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎯 Deteksi Wajah</h1>
+            <p>Sistem Deteksi Wajah Real-Time dengan AI</p>
+        </header>
+
+        <main>
+            <div class="content">
+                <div class="video-section">
+                    <div class="video-wrapper">
+                        <video id="video" autoplay playsinline></video>
+                        <canvas id="canvas"></canvas>
+                        <div class="loading" id="loading">Memuat model...</div>
+                    </div>
+                    <div class="controls">
+                        <button id="startBtn" class="btn btn-primary">▶ Mulai Deteksi</button>
+                        <button id="stopBtn" class="btn btn-danger" disabled>⏹ Hentikan</button>
+                        <button id="captureBtn" class="btn btn-success" disabled>📸 Ambil Foto</button>
+                    </div>
+                </div>
+
+                <div class="info-section">
+                    <div class="stats-box">
+                        <h3>📊 Statistik Deteksi</h3>
+                        <div class="stats">
+                            <div class="stat-item">
+                                <label>Wajah Terdeteksi:</label>
+                                <span id="faceCount">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <label>FPS:</label>
+                                <span id="fps">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <label>Akurasi:</label>
+                                <span id="accuracy">0%</span>
+                            </div>
+                            <div class="stat-item">
+                                <label>Status:</label>
+                                <span id="status" class="status-idle">Siap</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="info-box">
+                        <h3>ℹ️ Informasi</h3>
+                        <ul>
+                            <li>✅ Klik tombol "Mulai Deteksi" untuk memulai</li>
+                            <li>✅ Izinkan akses kamera untuk deteksi real-time</li>
+                            <li>✅ Sistem akan mendeteksi wajah Anda secara otomatis</li>
+                            <li>✅ Klik "Ambil Foto" untuk menangkap hasil deteksi</li>
+                            <li>✅ Teknologi: TensorFlow.js + Face-api</li>
+                        </ul>
+                    </div>
+
+                    <div class="detected-faces">
+                        <h3>👤 Wajah Terdeteksi</h3>
+                        <div id="facesList" class="faces-list">
+                            <p class="empty-message">Belum ada wajah terdeteksi</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="gallery-section" id="gallerySection" style="display: none;">
+                <h2>📷 Foto Hasil Deteksi</h2>
+                <div id="gallery" class="gallery"></div>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2026 Sistem Deteksi Wajah | Menggunakan TensorFlow.js</p>
+        </footer>
+    </div>
+
+    <!-- Library untuk deteksi wajah -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.11.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/coco-ssd@2.2.2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/blazeface@0.0.7"></script>
+    <script src="app.js"></script>
+</body>
+</html>
